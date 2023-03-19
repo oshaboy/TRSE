@@ -69,4 +69,4 @@ charset_resources/charsets/charset1.flf = :resources/character.rom
 exomizer_toggle = 0
 project_path = /home/oshaboy/Documents/GitHub/TRSE/Publish/tutorials/CHIP8/tutorials/
 open_files = ,test_cast.asm, test_cast.ras
-current_file = test_cast.ras
+current_file = test_cast.asm
