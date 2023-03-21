@@ -39,13 +39,10 @@ begin
 end;
 
 
-<<<<<<< Updated upstream
-procedure SaveToPRAM(pram: global array[8] of byte)
-=======
+
 procedure SavePRAM()
 var
 	saved : array[8] of byte;
->>>>>>> Stashed changes
 begin
 	asm("
 	LD I, saved
@@ -60,14 +57,10 @@ begin
 	");
 
 end;
-<<<<<<< Updated upstream
-procedure SaveFromPRAM(pram: global array[8] of byte)
-=======
 
 procedure LoadPRAM()
 var
 	saved : array[8] of byte;
->>>>>>> Stashed changes
 begin
 	asm("
 	LD I, saved
