@@ -12,6 +12,7 @@ procedure LowRes() inline;
 begin
 	asm("LOW");
 end;	
+
 procedure ScrollDown4(n : global byte);
 begin
 	if (n<16) then begin
@@ -26,16 +27,16 @@ begin
 	end;
 
 end;
+
 procedure ScrollLeft() inline;
 begin
 	asm("SCL");
 end;
+
 procedure ScrollRight() inline;
 begin
 	asm("SCR");
 end;
-
-
 
 procedure SavePRAM()
 var
@@ -72,6 +73,7 @@ begin
 
 	");
 end;
+
 procedure PrintDigitTall(x,y,c : global byte) 
 var
     saved : array of byte[3];
@@ -89,4 +91,5 @@ begin
         LD V2, [I]
     ");
 end;
+
 end.
