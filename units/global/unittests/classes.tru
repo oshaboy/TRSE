@@ -28,6 +28,10 @@ var
 		begin
 			this.b:=this.a*this.b;
 		end;
+		procedure DivTest1();
+		begin
+			this.b:=this.b/this.a;
+		end;
 //		c : array[3] of byte;
 	end;
 	s1 : StrItem;	
@@ -212,7 +216,6 @@ begin
 	sl.Add("HALLO");
 	sl.Add(#text);
 	sl.Add("BALL");
-
 	zp := sl.items[2].str;
 	Vars::text := "C1:";
 
@@ -299,6 +302,17 @@ begin
 	
 end;
 
+procedure DTest1();
+begin
+	ps1:=#s1;
+	ps1.b := 200;
+	ps1.a := 10;
+	ps1.DivTest1();	
+	Vars::text := "D1:";
+	if (ps1.b=20) then Common::PASS() else Common::FAIL();
+	
+end;
+
 
 procedure Exec();
 begin
@@ -339,12 +353,13 @@ begin
 //    CTestC2(); // FAILS fix
 //      CTestC2(); // FAILS fix
   @endif
-@ifdef NOT_DEFINED_YET_FIX_THIS_UP
+//@ifdef NOT_DEFINED_YET_FIX_THIS_UP
 	MTest1();
 	MTest2();
 	MTest3();
 	MTest4();
-@endif
+	DTest1();
+//@endif
     // Fails for now - FIX UP
 	Common::WaitABit();
 

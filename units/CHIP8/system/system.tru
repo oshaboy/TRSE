@@ -52,7 +52,7 @@ begin
     ");
     end;
 end;
-procedure PutPixel(x,y:global byte ) ;
+procedure PutPixel(x,y:global byte) inline;
 begin
     DrawLine(x,y,$80);
 end;
@@ -70,7 +70,7 @@ end;
 procedure Wait(word : global Integer);
 begin
     asm("
-        LD I, word
+        LD I, System_word
         LD V1, [I]
         LD DT, V1
         System_wait_loop1:
@@ -139,7 +139,9 @@ begin
 end;
 function WaitForKey() inline : byte;
 begin
-    asm("LD V0, K");
+    asm("
+        LD V0, K
+    ");
 end;
 
 procedure setDT(x : global byte);
@@ -154,8 +156,9 @@ end;
 
 function getDT() inline : byte;
 begin
-    asm("LD V0, DT");
-
+    asm("
+        LD V0, DT
+    ");
 end;
 
 function isKeydown(c : global byte) : boolean;

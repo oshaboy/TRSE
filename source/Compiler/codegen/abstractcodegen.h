@@ -74,13 +74,13 @@ public:
     virtual void dispatch(QSharedPointer<NodeVar> node) = 0;
     virtual void dispatch(QSharedPointer<NodeAssign> node);
     virtual void dispatch(QSharedPointer<NodeBlock> node);
-    virtual void dispatch(QSharedPointer<NodeVarType> node) = 0;
+    virtual void dispatch(QSharedPointer<NodeVarType> node) {}
     virtual void dispatch(QSharedPointer<NodeForLoop> node);
-    virtual void dispatch(QSharedPointer<NodeBinaryClause> node) = 0;
+    virtual void dispatch(QSharedPointer<NodeBinaryClause> node) {}
     virtual void dispatch(QSharedPointer<NodeCase> node);
     virtual void dispatch(QSharedPointer<NodeCast> node);
-    virtual void dispatch(QSharedPointer<NodeRepeatUntil> node) = 0;
-    virtual void dispatch(QSharedPointer<NodeComment> node) = 0;
+    virtual void dispatch(QSharedPointer<NodeRepeatUntil> node) {}
+    virtual void dispatch(QSharedPointer<NodeComment> node) {}
     virtual void dispatch(QSharedPointer<NodeControlStatement> node);
     virtual void dispatch(QSharedPointer<NodeConditional> node);
     virtual void dispatch(QSharedPointer<NodeProcedureDecl> node);
@@ -117,7 +117,7 @@ public:
     // Returns the rts/ret instruction for the current cpu
     virtual QString getReturn() = 0;
     // Returns the rti instruction for the current CPU
-    virtual QString getReturnInterrupt() = 0;
+    virtual QString getReturnInterrupt(){return getReturn();}
     // Returns the binary include command for the current assembler
     virtual QString getIncbin() { return "incbin"; }
     // Returns the call/jsr subroutine instruction for the current CPU

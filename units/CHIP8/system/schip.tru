@@ -3,14 +3,19 @@ var
 	n,x,y,z: byte;
 	pram : array[8] of byte;
 
+	
 procedure HiRes() inline;
 begin
-	asm("HIGH");
+	asm("
+	high
+	");
 end;	
 
 procedure LowRes() inline;
 begin
-	asm("LOW");
+	asm("
+	low
+	");
 end;	
 
 procedure ScrollDown4(n : global byte);
@@ -38,6 +43,7 @@ begin
 	asm("SCR");
 end;
 
+
 procedure SavePRAM()
 var
 	saved : array[8] of byte;
@@ -55,6 +61,7 @@ begin
 	");
 
 end;
+
 
 procedure LoadPRAM()
 var
@@ -74,6 +81,7 @@ begin
 	");
 end;
 
+
 procedure PrintDigitTall(x,y,c : global byte) 
 var
     saved : array of byte[3];
@@ -92,4 +100,4 @@ begin
     ");
 end;
 
-end.
+
