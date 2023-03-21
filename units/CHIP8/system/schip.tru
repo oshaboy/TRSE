@@ -2,10 +2,7 @@ Unit Schip;
 var
 	n,x,y,z: byte;
 	pram : array[8] of byte;
-<<<<<<< Updated upstream
-=======
-	
->>>>>>> Stashed changes
+
 procedure HiRes() inline;
 begin
 	asm("HIGH");
@@ -75,8 +72,6 @@ begin
 
 	");
 end;
-<<<<<<< Updated upstream
-=======
 procedure PrintDigitTall(x,y,c : global byte) 
 var
     saved : array of byte[3];
@@ -94,5 +89,4 @@ begin
         LD V2, [I]
     ");
 end;
->>>>>>> Stashed changes
 end.
