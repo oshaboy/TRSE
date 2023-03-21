@@ -100,14 +100,21 @@ begin
     ");
 end; 
 procedure PrintHexChar(x,y,c : global byte);
-
+var
+    saved : array of byte[3];
+    
 begin
     asm("
-
+        LD I, saved
+        LD [I], V2
+        
         LD I, System_x
         LD V2, [I]
         LD F, V2
         DRW V0, V1, 5 
+
+        LD I, saved
+        LD V2, [I]
     ");
 end;
 procedure PrintByte(n,x,y:global byte);

@@ -129,7 +129,6 @@ public:
 
 
     QString getReturn() override;
-    QString getReturnInterrupt() override { return "iret";}
 
     /*
      *

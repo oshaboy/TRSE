@@ -71,7 +71,9 @@ static const char *inst_names[] = {
     "scd",
     "scr",
     "scl",
-    "exit"
+    "exit",
+    "low",
+    "high"
 };
 
 //static int sym;
