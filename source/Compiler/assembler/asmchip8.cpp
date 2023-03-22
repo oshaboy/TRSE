@@ -83,9 +83,7 @@ void AsmChip8::Program(QString name, QString vicParam)
 
 void AsmChip8::EndProgram()
 {
-//    qDebug() << m_currentBlock;
-//    EndMemoryBlock();
-//    exit(1);
+
 }
 
 void AsmChip8::Write(QString str, int level)
@@ -243,7 +241,7 @@ void AsmChip8::DeclareString(QString name, QStringList initVal, QStringList flag
 
     Write(name +":\n\t" + String(initVal,!flags.contains("no_term")),0);
 }
-
+#if 0
 void AsmChip8::BinOP(TokenType::Type t,  bool clearFlag)
 {
     if (t == TokenType::PLUS) {
@@ -273,7 +271,7 @@ void AsmChip8::BinOP(TokenType::Type t,  bool clearFlag)
 */
 
 }
-
+#endif
 int AsmChip8::CodeSizeEstimator(QStringList &lines) {
     int size = 0;
     //   qDebug() << "EST START";

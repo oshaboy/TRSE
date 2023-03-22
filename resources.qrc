@@ -742,6 +742,8 @@
         <file>resources/images/CHIP8.png</file>
         <file>resources/text/help/r/addemulatorparam.rtf</file>
         <file>resources/code/tiki100/unpack.asm</file>
+        <file>resources/code/chip8/init.asm</file>
+        <file>resources/code/chip8/xo_init.asm</file>
         <file>resources/text/help/r/volatile.rtf</file>
         <file>resources/text/help/r/bin2inc.rtf</file>
         <file>resources/text/help/r/vbmcompilechunk.rtf</file>

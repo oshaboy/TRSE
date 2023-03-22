@@ -68,5 +68,5 @@ data_header_resources/charsets/charset1.flf = 0
 charset_resources/charsets/charset1.flf = :resources/character.rom
 exomizer_toggle = 0
 project_path = /home/oshaboy/Documents/GitHub/TRSE/Publish/tutorials/CHIP8/tutorials/
-open_files = ,test_cast.asm, test_cast.ras
-current_file = test_cast.asm
+open_files = ,[ext]units/CHIP8/system/system.tru, test_cast.ras
+current_file = prime_finder.ras

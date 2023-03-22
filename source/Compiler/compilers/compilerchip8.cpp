@@ -10,15 +10,12 @@ void CompilerChip8::InitAssemblerAnddispatcher(QSharedPointer<AbstractSystem> sy
     m_assembler = QSharedPointer<AsmChip8>(new AsmChip8());//
     m_codeGen = QSharedPointer<CodeGenChip8>(new CodeGenChip8());
     m_codeGen->dontOutputLineNumbers();
-
-//    m_assembler->Asm("BALLE");
-
-
-
     m_assembler->m_symTab->m_constants = m_parser.m_symTab->m_constants;
-//    m_assembler->WriteConstants();
-
     // Init default stuff
+    QString blk0=m_assembler->NewLabel("block0");
+    m_assembler->Asm("jp "+blk0);
+    m_assembler->IncludeFile(":resources/code/chip8/init.asm");
+    m_assembler->Label(blk0);
 
 }
 

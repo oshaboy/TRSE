@@ -5,54 +5,17 @@ CodeGenChip8::CodeGenChip8()
 {
 
 }
-void CodeGenChip8::dispatch(QSharedPointer<NodeProgram> node){
 
-	AbstractCodeGen::dispatch(node);
-	QString injected_assembly=" \
-	Inject_ptr: dw 0 \n\
-	Inject_save_p2: db 0,0,0 \n\
-	Inject_LoadPointer: \n\
-		LD I, Inject_ptr \n\
-		LD V1, [I] \n\
-		LD I, Inject_save_p2 \n\
-		LD [I], V2 \n\
-		LD V2, #10 \n\
-		SUBN V2, V0 \n\
-		SE VF, 0 \n\
-		RET \n\
-		LD I, Inject_save_p2 \n\
-		LD V2, [I] \n\
-		ADD V0, #A0 \n\
-		LD I, Inject_load_inst \n\
-		LD [I], V1 \n\
-	Inject_load_inst: \n\
-		LD I, 0 \n\
-		RET";
-	#if 0
-	if (m_system==XO_CHIP){
-		injected_assembly+=" \
-		LD I, Inject_ptr \n\
-		LD V1, [I] \n\
-		LD I, XO_CHIP_load_inst \n\
-		LD [I], V1 \n\
-		dw #f000 \n\
-		XO_CHIP_load_inst: \n\
-		dw 0 \n\
-		RET\n";
-	}
-	#endif
-	as->Asm(injected_assembly);
-}
 void CodeGenChip8::PrintBop(TokenType::Type type, QString x0, QString x1)
 {
 	if (type==TokenType::Type::PLUS)
 		as->Asm("add "+x0+","+x1);
 	else if (type==TokenType::Type::MINUS)
 		as->Asm("sub "+x0+","+x1);
-/*    if (type==TokenType::Type::MUL)
-		Binop("mul",x0,x1,value);
-	if (type==TokenType::Type::DIV)
-		Binop("div",x0,x1,value);*/
+    else if (type==TokenType::Type::MUL)
+		as->Comment("MUL Unimplemented");
+	else if (type==TokenType::Type::DIV)
+		as->Comment("DIV Unimplemented");
 	else if (type==TokenType::Type::BITOR)
 		as->Asm("or "+x0+","+x1);
 	else if (type==TokenType::Type::XOR)
@@ -101,6 +64,10 @@ void CodeGenChip8::PrintBop16(TokenType::Type type, QString x0_hi, QString x0_lo
 	} else if (type==TokenType::Type::BITAND){
 		as->Asm("and "+x0_lo+","+x1_lo);
 		as->Asm("and "+x0_hi+","+ x1_hi);
+    } else if (type==TokenType::Type::MUL) {
+		as->Comment("MUL Unimplemented");
+    } else if (type==TokenType::Type::DIV) {
+		as->Comment("DIV Unimplemented");
 	} else if (type==TokenType::Type::SHL || type==TokenType::Type::SHR){
 		QString loop_lbl = as->NewLabel("shift_loop");
 		QString end_lbl = as->NewLabel("shift_end");

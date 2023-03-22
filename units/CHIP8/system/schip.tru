@@ -1,6 +1,6 @@
 Unit Schip;
 var
-	n,x,y,z: byte;
+	n,x,y,c: byte;
 	pram : array[8] of byte;
 
 	
@@ -44,12 +44,12 @@ begin
 end;
 
 
-procedure SavePRAM()
+procedure SavePRAM();
 var
-	saved : array[8] of byte;
+	SP_saved : array[8] of byte;
 begin
 	asm("
-	LD I, saved
+	LD I, Schip_SP_saved
 	LD [I], V7
 
 	LD I, Schip_pram
@@ -63,12 +63,12 @@ begin
 end;
 
 
-procedure LoadPRAM()
+procedure LoadPRAM();
 var
-	saved : array[8] of byte;
+	LP_saved : array[8] of byte;
 begin
 	asm("
-	LD I, saved
+	LD I, Schip_LP_saved
 	LD [I], V7
 
 	LD I, Schip_pram
@@ -82,12 +82,12 @@ begin
 end;
 
 
-procedure PrintDigitTall(x,y,c : global byte) 
+procedure PrintDigitTall(x,y,c : global byte);
 var
-    saved : array of byte[3];
+    PDT_saved : array[3] of byte;
 begin
     asm("
-        LD I, saved
+        LD I, Schip_PDT_saved
         LD [I], V2
 
         LD I, Schip_x
@@ -100,4 +100,5 @@ begin
     ");
 end;
 
+end.
 

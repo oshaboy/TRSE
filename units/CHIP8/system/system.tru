@@ -98,14 +98,14 @@ begin
 
 
     ");
-end; 
+end;
+ 
 procedure PrintHexChar(x,y,c : global byte);
 var
-    saved : array of byte[3];
-    
+    saved : array[3] of byte;    
 begin
     asm("
-        LD I, saved
+        LD I, System_saved
         LD [I], V2
         
         LD I, System_x
@@ -113,13 +113,13 @@ begin
         LD F, V2
         DRW V0, V1, 5 
 
-        LD I, saved
+        LD I, System_saved
         LD V2, [I]
     ");
 end;
 procedure PrintByte(n,x,y:global byte);
 var 
-hundreds, tens, units: byte;
+	hundreds, tens, units: byte;
 begin
     asm("
         LD I, System_n 

@@ -26,15 +26,7 @@
 #include "source/Compiler/codegen/methods/abstractmethods.h"
 #include "source/Compiler/codegen/abstractcodegen.h"
 
-/*
-enum CHIP8_TYPE{
-    OG,
-    SCHIP,
-    CHIPX,
-    MEGA,
-    XO_CHIP
-};
-*/
+
 class CodeGenChip8 : public AbstractCodeGen
 {
 private: 
@@ -56,7 +48,6 @@ public:
     void dispatch(QSharedPointer<Node> node) override;
     void dispatch(QSharedPointer<NodeRepeatUntil> node) override;
     void dispatch(QSharedPointer<NodeComment> node) override;
-    void dispatch(QSharedPointer<NodeProgram> node) override;
 
 
 

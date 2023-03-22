@@ -1,0 +1,21 @@
+program PrimeFind;
+@use "system/system"
+@use "system/schip"
+
+
+var
+	xpos, ypos : byte;
+	
+procedure printInt(w : Integer);
+var 
+	digit : byte;
+begin
+	digit := w / 10;
+end;
+
+begin
+	Schip::HiRes();
+	System::Clear();
+	printInt(2);
+	while(1) do;
+end.
