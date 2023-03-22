@@ -31,22 +31,18 @@ class CodeGen6502 : public AbstractCodeGen
 {
 private:
     int lostStack = 0;
+    int block16bit=0;
+    int m_stackShift = 0;
 public:
     CodeGen6502();
-    int m_stackShift = 0;
 
 
     void dispatch(QSharedPointer<NodeBinOP>node) override;
     void dispatch(QSharedPointer<NodeNumber>node) override;
     void dispatch(QSharedPointer<NodeString> node) override;
     void dispatch(QSharedPointer<NodeVarDecl> node) override;
- //   void dispatch(QSharedPointer<NodeBlock> node) override;
     void dispatch(QSharedPointer<NodeVarType> node) override;
     void dispatch(QSharedPointer<NodeBinaryClause> node) override;
-  //  void dispatch(QSharedPointer<NodeProcedure> node) override;
-//    void dispatch(QSharedPointer<NodeProcedureDecl> node) override;
-   // void dispatch(QSharedPointer<NodeConditional> node) override;
-   // void dispatch(QSharedPointer<NodeForLoop> node) override;
     void dispatch(QSharedPointer<NodeVar> node) override;
     void dispatch(QSharedPointer<Node> node) override;
     void dispatch(QSharedPointer<NodeRepeatUntil> node) override;
@@ -54,7 +50,6 @@ public:
     void dispatch(QSharedPointer<NodeUnaryOp> node) override;
 
     QString resolveTemporaryClassPointer(QString name,int mul,int& res) override;
-    int block16bit=0;
 
 
 
@@ -65,7 +60,7 @@ public:
 
     bool UseBlocks() override { return true;}
 
-    void HackPointer(QSharedPointer<Node> node);
+    //void HackPointer(QSharedPointer<Node> node);
 
     // 6502 only
     // When using stack parameters on the 6502, you need to pop the stack N times when exiting a subroutine.
@@ -111,7 +106,6 @@ public:
 
     void IncSid(QSharedPointer<NodeVarDecl> node);
 
-//    void IncBin(QSharedPointer<NodeVarDecl> node);
 
     void PrintCompare(QSharedPointer<Node> node, QString lblSuccess, QString lblFailed);
     void DeclarePointer(QSharedPointer<NodeVarDecl> node) override;
@@ -125,7 +119,6 @@ public:
      * NodeBinaryClause functions
      *
     */
-//    void BinaryClause(QSharedPointer<Node> node);
 
     void BuildToCmp(QSharedPointer<Node> node);
     
@@ -134,7 +127,6 @@ public:
     void Enable16bit();
 
 
-//    void BuildConditional(QSharedPointer<Node> node, QString lblSuccess, QString lblFailed);
     void BuildConditional(QSharedPointer<Node> node,  QString lblSuccess, QString lblFailed, bool page) override;
 
     void BinaryClauseInteger(QSharedPointer<Node> node,QString lblSuccess, QString lblFailed, bool page);
@@ -142,8 +134,6 @@ public:
 
 
 
-
-  //  void LogicalClause(QSharedPointer<Node> node);
 
 
     /*
@@ -154,7 +144,6 @@ public:
      */
 
 
-//    void Compare(QSharedPointer<NodeForLoop> node, QSharedPointer<NodeVar> var, bool isLarge, QString loopDone, QString loopNotDone, bool inclusive);
 
 
     void CompareAndJumpIfNotEqualAndIncrementCounter(QSharedPointer<Node> nodeA, QSharedPointer<Node> nodeB, QSharedPointer<Node> step, QString lblJump, bool isOffPage, bool isInclusive) override;
@@ -227,11 +216,6 @@ public:
     virtual QString getInitProcedure() override;
 
     bool IsSimpleAssignInteger(QSharedPointer<NodeAssign> node) override;
-
-
-    //    void HandleNodeAssignCopyRecord(QSharedPointer<NodeAssign>node);
-
-
 
 };
 

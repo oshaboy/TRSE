@@ -1921,7 +1921,6 @@ void CodeGen6502::LoadByteArray(QSharedPointer<NodeVar> node) {
         if (m_flag1)
             as->Asm("pha");
 
-        //as->Asm("pha");
         node->m_expr->Accept(this);
         as->Term();
         if (s->m_arrayType==TokenType::INTEGER && scale) // integer array index is *2 (two bytes per array slot)
@@ -1935,11 +1934,9 @@ void CodeGen6502::LoadByteArray(QSharedPointer<NodeVar> node) {
     as->Asm(m+  getValue(node)+",x "+vol);
 
     if (s->m_arrayType==TokenType::INTEGER) { // integer array need to load the high byte also
-        //        as->Asm("ldy "+  getValue(node)+",x");
-        //      as->Asm("inx");
+
         as->Asm("ldy "+  getValue(node)+"+1,x "+vol);
     }
-    //    if (disable16bit)
     Enable16bit();
 }
 
@@ -1965,9 +1962,7 @@ void CodeGen6502::LoadVariable(QSharedPointer<Node> node)
 
 void CodeGen6502::LoadVariable(QSharedPointer<NodeVar> node) {
 
-    /*        if (as->m_symTab->Lookup(value)==nullptr)
-                ErrorHandler::e.Error("Could not find variable '" +value +"' for storing.",m_op.m_lineNumber);
-    */
+
     TokenType::Type t = as->m_symTab->Lookup(getValue(node), node->m_op.m_lineNumber)->getTokenType();
     QString type = as->m_symTab->Lookup(getValue(node), node->m_op.m_lineNumber)->m_type;
     if (as->m_symTab->m_records.contains(type))
@@ -1979,7 +1974,7 @@ void CodeGen6502::LoadVariable(QSharedPointer<NodeVar> node) {
     }
 
 
-    //    qDebug() << "LoadVariable: "<<pp;
+
     if (t==TokenType::ADDRESS || t==TokenType::STRING || t==TokenType::CSTRING || t==TokenType::INCBIN) {
         LoadByteArray(node);
         return;
@@ -2014,8 +2009,7 @@ void CodeGen6502::LoadVariable(QSharedPointer<NodeVar> node) {
 void CodeGen6502::LoadVariable(QSharedPointer<NodeNumber>node)
 {
     as->ClearTerm();
-    //   qDebug() << "OAD NUMBER";
-//    as->Comment("Loadvariable numbr");
+
     if (node->getStoreType()==TokenType::LONG) {
         as->Asm("lda "+node->getValue8bit(as,false));
         as->Asm("ldy "+node->getValue8bit(as,true));
@@ -2044,8 +2038,6 @@ void CodeGen6502::LoadVariable(QSharedPointer<NodeProcedure> node)
 
 
 void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
-    //        as->Comment("VarNode StoreVariable");
-    //          ErrorHandler::e.Error("Could not find variable '" +value +"' for storing.", m_op.m_lineNumber);
     QString vol = "";
     if (!node->m_ignoreLookup) {
         auto s = as->m_symTab->Lookup(getValue(node), node->m_op.m_lineNumber);
@@ -2065,7 +2057,6 @@ void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
     }
 
     if (node->m_expr != nullptr) {
-        //        QSharedPointer<NodeNumber> number = dynamic_cast<QSharedPointer<NodeNumber>>(node->m_expr);
         bool isNumber = node->m_expr->isPureNumeric();
         if (isNumber && node->getType(as)!=TokenType::POINTER)
         { // IS NUMBER optimize}
@@ -2088,13 +2079,11 @@ void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
                     Enable16bit();
                 }
             }
-            //                as->Asm("tya");
             return;
         }
         else {
             //if regular array
             QSharedPointer<NodeVar> var = qSharedPointerDynamicCast<NodeVar>(node->m_expr);
-            //QSharedPointer<NodeNumber> num = dynamic_cast<QSharedPointer<NodeNumber>>(node->m_expr);
             QString secondReg="x";
             QString pa = "";
             QString pb= "";
@@ -2108,12 +2097,10 @@ void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
                 }
                 as->Comment("Storing to a pointer");
             }
-            //            as->Comment("Writetype: " +TokenType::getType(node->m_classvariableType));
 
 
             // Optimize for number or pure var
             if (node->m_expr->getType(as)==TokenType::INTEGER_CONST && node->getArrayType(as)!=TokenType::INTEGER && node->m_classvariableType!=TokenType::INTEGER) {
-                //qDebug() << "StoreVariable:: HER";
                 as->ClearTerm();
 
                 // Special case: if POINTER
@@ -2123,30 +2110,15 @@ void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
                 as->Term("ld"+secondReg +" ");
                 node->m_expr->Accept(this);
                 as->Term();
-                //                as->Asm("COMMENT BUT WHY DOES IT DISAPPEAR");
                 as->Asm("sta " +pa + getValue(node)+ pb + "," + secondReg + vol);
                 if (node->getArrayType(as)==TokenType::INTEGER) {
                     as->Asm("in"+secondReg);
                     as->Asm("tya");
-                    //                    as->Asm("sta " +pa + getValue(node)+ pb + "," + secondReg);
-
                     as->Asm("sta "  + getValue(node) + "," + secondReg + vol);
                 }
                 return;
             }
-            // Just regular var optimize
-            // Regular expression
 
-            // Special case: p[5] := something;
-            /*            if (node->isPointer(as) && node->m_expr->getType(as)==TokenType::INTEGER_CONST && node->getArrayType(as)==TokenType::INTEGER)
-            {
-                as->Comment("Integer const pointer set to expression");
-                QString val = QString::number(node->m_expr->getValueAsInt(as)*2);
-                as->ReplacePrevLdyWithLdx();
-//                if (node->)
-                return;
-            }
-*/
 
             QString tya ="tya";
             if (node->isPointer(as) && node->getArrayType(as)==TokenType::INTEGER) {
@@ -2160,8 +2132,7 @@ void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
 
             bool usePush = true;
 
-            //            if (node->m_expr->isPure())
-            //              usePush = false;
+
 
             if (usePush)
                 as->Asm("pha");
@@ -2170,7 +2141,7 @@ void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
                 ErrorHandler::e.Error("You cannot use integers variables as array indices!", node->m_op.m_lineNumber);
             }
             node->m_expr->Accept(this);
-            //                node->m_expr->Build(as);
+
             as->Term();
             if (node->getArrayType(as)==TokenType::INTEGER)
                 as->Asm("asl");
@@ -2202,14 +2173,14 @@ void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
 
         as->Asm("sta " + getValue(node)+vol);
         if (as->m_symTab->Lookup(getValue(node), node->m_op.m_lineNumber)->getTokenType() == TokenType::INTEGER || node->m_classvariableType==TokenType::INTEGER) {
-//            as->Asm("sta " + getValue(node)+vol);
+
             Disable16bit();
 
             as->Asm("sty " + getValue(node) + "+1"+vol);
             Enable16bit();
         }
         if (as->m_symTab->Lookup(getValue(node), node->m_op.m_lineNumber)->getTokenType() == TokenType::LONG || node->m_classvariableType==TokenType::LONG) {
-  //          as->Asm("sta " + getValue(node));
+
             Disable16bit();
 
             as->Asm("sty " + getValue(node) + "+1"+vol);
@@ -2218,31 +2189,6 @@ void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
         }
 
 
-
- /*       if (as->m_symTab->Lookup(getValue(node), node->m_op.m_lineNumber)->getTokenType() == TokenType::BYTE) {
-            as->Asm("sta " + getValue(node));
-            return;
-        }
-        else
-            if (as->m_symTab->Lookup(getValue(node), node->m_op.m_lineNumber)->getTokenType() == TokenType::ADDRESS) {
-
-                as->Asm("sta " + getValue(node));
-                return;
-            }
-            else
-                if (as->m_symTab->Lookup(getValue(node), node->m_op.m_lineNumber)->getTokenType() == TokenType::INTEGER || node->m_classvariableType==TokenType::INTEGER) {
-                    as->Asm("sta " + getValue(node));
-                    Disable16bit();
-
-                    as->Asm("sty " + getValue(node) + "+1");
-                    Enable16bit();
-
-                    return;
-                }
-                else {
-                    ErrorHandler::e.Error("Unable to assign variable : "+getValue(node)+ " of type "+node->getTypeText(as),node->m_op.m_lineNumber);
-                }
-                */
 
     }
 
@@ -2253,9 +2199,9 @@ void CodeGen6502::StoreVariable(QSharedPointer<NodeVar> node) {
 
 void CodeGen6502::LoadStackVariable(QSharedPointer<NodeVar> node) {
     as->Asm("tsx");
-    //    as->Asm("txa");
+
     as->Asm("lda $103+"+QString::number(node->getStackShift()+m_stackShift)+",x");
-    //    qDebug() << node->getStackShift()+m_stackShift;
+
 
 }
 
@@ -2268,10 +2214,7 @@ void CodeGen6502::AssignString(QSharedPointer<NodeAssign> node) {
 
     QString lblCpy=as->NewLabel("stringassigncpy");
     QString str = DefineTempString(right);
-    //as->Label(str + "\t.dc \"" + right->m_op.m_value + "\",0");
-    //  as->Label(lbl);
 
-    //    qDebug() << "IS POINTER " << isPointer;
     if (isPointer || left->isStringList(as)) {
             as->Asm(";has array index");
             as->Asm("lda #<"+str);
@@ -2291,7 +2234,6 @@ void CodeGen6502::AssignString(QSharedPointer<NodeAssign> node) {
         as->Asm("cmp #0 ;keep");  // ask post optimiser to not remove this
         as->Asm("bne " + lblCpy);
     }
-    //  as->PopLabel("stringassign");
     as->PopLabel("stringassignstr");
     as->PopLabel("stringassigncpy");
 
@@ -2299,7 +2241,6 @@ void CodeGen6502::AssignString(QSharedPointer<NodeAssign> node) {
 
 bool CodeGen6502::AssignPointer(QSharedPointer<NodeAssign> node) {
     QSharedPointer<NodeVar> bVar = qSharedPointerDynamicCast<NodeVar>(node->m_right);
-    //    QSharedPointer<NodeNumber> bNum = dynamic_cast<QSharedPointer<NodeNumber>>(node->m_right);
     QSharedPointer<NodeVar> aVar = qSharedPointerDynamicCast<NodeVar>(node->m_left);
 
     if (IsSimpleIncDec(node))
@@ -2331,8 +2272,6 @@ bool CodeGen6502::AssignPointer(QSharedPointer<NodeAssign> node) {
         }
 
         Enable16bit();
-        //if (!node->m_right->isWord(as))
-        //    ErrorHandler::e.Warning("Assigning an 8-bit value to pointer. Is this intentional?", node->m_op.m_lineNumber);
 
         return true;
     }
@@ -2349,7 +2288,6 @@ bool CodeGen6502::AssignPointer(QSharedPointer<NodeAssign> node) {
     Enable16bit();
 
     return true;
-    //     ErrorHandler::e.Error("Right-hand side must be constant or address", node->m_op.m_lineNumber);
 
 }
 
@@ -2369,19 +2307,14 @@ bool CodeGen6502::isSimpleAeqAOpB(QSharedPointer<NodeVar> var, QSharedPointer<No
     QSharedPointer<NodeVar> rrvar = qSharedPointerDynamicCast<NodeVar>(rterm->m_right);
     if (!rterm->m_right->isPureNumeric())
         return false;
-    //  int num = rterm->m_right->getValueAsInt(as);
-
-    //    QSharedPointer<NodeNumber> rrnum = dynamic_cast<QSharedPointer<NodeNumber>>(rterm->m_right);
 
 
     if (rrvar==nullptr && rvar==nullptr)
         return false;
 
-    //    qDebug() << "HERE1";
 
     if (!(rterm->m_op.m_type==TokenType::PLUS || rterm->m_op.m_type==TokenType::MINUS))
         return false;
-    //  qDebug() << "HERE2";
 
 
     if (var->isWord(as))
@@ -2391,14 +2324,12 @@ bool CodeGen6502::isSimpleAeqAOpB(QSharedPointer<NodeVar> var, QSharedPointer<No
         return false;
 
 
-    //    return false;
 
     as->Comment("Optimizer: a = a +/- b");
     LoadVariable(bvar);
     as->BinOP(rterm->m_op.m_type);
     rterm->m_right->Accept(this);
     as->Term();
-//    Cast(var->getType(as), rterm->getStoreType());
     StoreVariable(var);
     return true;
 }
@@ -2422,10 +2353,6 @@ bool CodeGen6502::isSimpleAeqAOpB16Bit(QSharedPointer<NodeVar> var, QSharedPoint
     if (var->hasArrayIndex())
         return false;
 
-    //    QSharedPointer<NodeVar> rrvar = dynamic_cast<QSharedPointer<NodeVar>>(rterm->m_right);
-    //    QSharedPointer<NodeNumber> rrnum = dynamic_cast<QSharedPointer<NodeNumber>>(rterm->m_right);
-
-    //    qDebug() << "IsPure "<<rterm->m_right->isPure();
 
     bool variable = rvar!=nullptr;
 
@@ -2437,86 +2364,26 @@ bool CodeGen6502::isSimpleAeqAOpB16Bit(QSharedPointer<NodeVar> var, QSharedPoint
 
     if (!(rterm->m_op.m_type==TokenType::PLUS || rterm->m_op.m_type==TokenType::MINUS))
         return false;
-    //    qDebug()<< rterm->m_right->getValue(as);
-    /*    qDebug() << "isSimpleAeqAOpB16Bit" << var->isWord(as) << rterm->m_right->is8bitValue(as) << TokenType::getType(node->getLoadType()) ;
 
-    qDebug() << "Is pure " <<rterm->m_right->isPure() << " is variable " << variable;
-    qDebug() << "Is word " <<var->isWord(as) << " is 8bit " << rterm->m_right->is8bitValue(as);
-    qDebug() << "type " << TokenType::getType(rterm->m_right->getType(as));
-*/
-
-
-
-    /*    if (var->isWord(as) &&  rterm->m_right->is8bitValue(as) && !(node->getLoadType()==TokenType::INTEGER)) {
-  //      qDebug() << "WHOO";
-        //          qDebug() << "Cont";
-
-        //       qDebug() << "CodeGen6502::isSimpleAeqAOpB16Bit HERE";
-        QString lbl = as->NewLabel("WordAdd");
-        as->Comment("WORD optimization: a=a+b");
-        //var->Accept(this);
-        as->Asm("lda " + getValue(var));
-        as->Term();
-        //        as->Asm("clc");
-        as->BinOP(rterm->m_op.m_type);
-
-        rterm->m_right->Accept(this);
-        as->Term();
-        if (rterm->m_op.m_type==TokenType::PLUS) {
-            as->Asm("bcc "+lbl);
-            as->Asm("inc " + getValue(var) + "+1");
-        }
-        else {
-            as->Asm("bcs "+lbl);
-            as->Asm("dec " + getValue(var) + "+1");
-        }
-
-        as->Label(lbl);
-        as->Asm("sta " + getValue(var) + "+0");
-        //        as->Asm("sty " + getValue(var) +"+1");
-
-        as->PopLabel("WordAdd");
-        return true;
-
-    }*/
     if (var->isWord(as) && rterm->m_right->isPure()) {
         QString lbl = as->NewLabel("WordAdd");
         if (bvar->getValue(as)!=var->getValue(as))
-            //        qDebug() << "OPTIMIZATION " <<bvar->getValue(as) << var->getValue(as);
-            //
+
             as->Comment("INTEGER optimization: a=b+c ");
         QString Blo = getValue8bit(bvar,false);
         QString Bhi = getValue8bit(bvar,true);
-        /*        if (var->isPointer(as)) {
-            as->Comment("Resulting var is POINTER: Assuming : a=address+c ");
-            if (bvar->isPureVariable() && !bvar->isPointer(as)) {
-                Blo ="#<"+getValue(bvar);
-                Bhi="#>"+getValue(bvar);
-            }
-        }*/
-        //var->Accept(this);
+
         as->Asm("lda " +Blo);
         as->Term();
-        //        as->Asm("clc");
         as->BinOP(rterm->m_op.m_type);
 
         as->Term(rterm->m_right->getValue8bit(as,false),true);
 
-        //rterm->m_right->Accept(this);
+
         as->Term();
-        /*        if (rterm->m_op.m_type==TokenType::PLUS) {
-            as->Asm("bcc "+lbl);
-            as->Asm("inc " + getValue(var) + "+1");
-        }
-        else {
-            as->Asm("bcs "+lbl);
-            as->Asm("dec " + getValue(var) + "+1");
-        }
-*/
-        //        as->Label(lbl);
+
         as->Asm("sta " + getValue(var) + "+0");
         // Optimization
-        //        qDebug() << rterm->m_right->getValue8bit(as,true);
         if ((rterm->m_right->getValue8bit(as,true)=="#$00" || rterm->m_right->getValue8bit(as,true)=="#0") && bvar->getValue(as) == var->getValue(as)) {
             as->Comment("Optimization : A := A op 8 bit - var and bvar are the same - perform inc");
             if (rterm->m_op.m_type==TokenType::PLUS) {
@@ -2810,7 +2677,7 @@ QString CodeGen6502::resolveTemporaryClassPointer(QString name, int mul, int& re
 
 
 
-
+#if 0
 void CodeGen6502::HackPointer(QSharedPointer<Node> n)
 {
     if (n==nullptr)
@@ -2842,7 +2709,7 @@ void CodeGen6502::HackPointer(QSharedPointer<Node> n)
     }
 
 }
-
+#endif
 
 void CodeGen6502::Cast(TokenType::Type from, TokenType::Type to)
 {
@@ -3171,7 +3038,6 @@ bool CodeGen6502::StoreStackParameter(QSharedPointer<NodeAssign> n)
     }
 
     as->Asm("tsx");
-    //    as->Asm("txa");
     as->Asm("sta $103+"+QString::number(var->getStackShift())+",x");
 
 

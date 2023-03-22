@@ -839,10 +839,10 @@ void CodeGenChip8::BuildConditional(QSharedPointer<Node> node,  QString lblSucce
 
 }
 
+#if 0
 
 void CodeGenChip8::CompareAndJumpIfNotEqualAndIncrementCounter(QSharedPointer<Node> nodeA, QSharedPointer<Node> nodeB, QSharedPointer<Node> step, QString lblJump, bool isOffPage, bool isInclusive)
 {
-
 	QString loopDone = as->NewLabel("loopdone");
 	as->Comment("Compare is onpage");
 
@@ -853,7 +853,7 @@ void CodeGenChip8::CompareAndJumpIfNotEqualAndIncrementCounter(QSharedPointer<No
 	return;
 
 
-#if 0
+
 	if (step!=nullptr)
 		ErrorHandler::e.Error("For loops currently don't support step",nodeA->m_op.m_lineNumber);
 
@@ -896,11 +896,11 @@ void CodeGenChip8::CompareAndJumpIfNotEqualAndIncrementCounter(QSharedPointer<No
 	}
 	as->Asm("jp "+lblJump);
 
-#endif
+
 }
 void CodeGenChip8::CompareAndJumpIfNotEqual(QSharedPointer<Node> nodeA, QSharedPointer<Node> nodeB, QString lblJump, bool isOffPage)
 {
-	#if 0
+
 	if (nodeA->isWord(as)) nodeB->setLoadType(TokenType::INTEGER);
 	LoadVariable(nodeA);
 	QString ax = getReg();
@@ -910,8 +910,8 @@ void CodeGenChip8::CompareAndJumpIfNotEqual(QSharedPointer<Node> nodeA, QSharedP
 	PopReg();
 	as->Asm(m_cmp+ax+","+bx);
 	as->Asm(m_jne+lblJump);
-	#endif 
 }
+#endif 
 
 QString CodeGenChip8::getReturn() { return "ret";}
 

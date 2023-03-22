@@ -384,7 +384,7 @@ void AbstractCodeGen::IncreaseCounter(QSharedPointer<Node> step, QSharedPointer<
     assign->Accept(this);
 
 }
-
+#if 0
 void AbstractCodeGen::Compare(QSharedPointer<Node> nodeA, QSharedPointer<Node> nodeB, QSharedPointer<Node> step, bool isLarge, QString loopDone, QString loopNotDone, bool inclusive)
 {
 
@@ -401,6 +401,7 @@ void AbstractCodeGen::Compare(QSharedPointer<Node> nodeA, QSharedPointer<Node> n
 
     cond->Accept(this);
 }
+#endif 
 
 void AbstractCodeGen::SmallLoop(QSharedPointer<NodeForLoop> node, QSharedPointer<NodeVar> var, bool inclusive)
 {
